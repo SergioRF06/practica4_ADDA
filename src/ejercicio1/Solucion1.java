@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jgrapht.GraphPath;
+
 import ejercicio1.Datos1.Candidato;
 import us.lsi.common.List2;
 import us.lsi.common.Set2;
@@ -14,10 +16,25 @@ public class Solucion1 {
 	/* public static Solucion1 create(GraphPath<---, ---> gp) { Para A* y BT
 		TODO obtiene la lista de alternativas del camino y llama al otro factoria
 	}*/
+	public static Solucion1 create(GraphPath<Vertex1, Edge1> path) {
+		return Solucion1.ofEdges(path.getEdgeList());
+	}
+
 	
 	public static Solucion1 create(List<Integer> ls) {
 		return new Solucion1(ls);
 	}
+	
+	
+	public static Solucion1 ofEdges(List<Edge1> ls) {
+		List<Integer> alternativas = List2.empty();
+		for (Edge1 alternativa : ls) {
+			alternativas.add(alternativa.action());
+		}
+		Solucion1 s = Solucion1.create(alternativas);
+		return s;
+	}
+
 
 	private Double valTotal, gasto;
 	

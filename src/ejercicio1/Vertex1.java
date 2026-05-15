@@ -7,16 +7,20 @@ import java.util.Set;
 
 import us.lsi.graphs.virtual.VirtualVertex;
 
-public interface Vertex1 extends VirtualVertex<Vertex1, Edge1, Integer>{
+public interface Vertex1 extends VirtualVertex<Vertex1, Edge1, Integer> {
+	
+	Integer index();
+	Double presupuestoRestante();
+	Set<String> cualidadesRestantes();
+	List<Integer> elegidos();
+	
+	Boolean goal();
+	Boolean goalHasSolution();
+	Boolean isValid();
 
-		Integer index();
-		Set<String> cualidades();
-		Double sueldoAcumulado();
-		List<Integer> elegidos();
-		
-		Boolean isGoal();
-				
-		public static Vertex1 initial() {
-			return new Vertex1I(0, new HashSet<>(), 0., new ArrayList<>());
-		}
+	public static Vertex1 start() {
+		Set<String> cualidadesRestantes = new HashSet<>(Datos1.getCualidades());
+		List<Integer> elegidos = new ArrayList<>();
+		return new Vertex1I(0, (double) Datos1.getPresupuestoMax(), cualidadesRestantes, elegidos);
+	}
 }

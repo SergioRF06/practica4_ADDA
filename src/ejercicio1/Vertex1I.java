@@ -5,73 +5,75 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public record Vertex1I(Integer index, Set<String> cualidades, Double sueldoAcumulado, List<Integer> elegidos) 
-			implements Vertex1 {
+public record Vertex1I(Integer index, Double presupuestoRestante, Set<String> cualidadesRestantes, List<Integer> elegidos) implements Vertex1 {
 	
-	public static Vertex1 initial() {
-		return new Vertex1I(0, new HashSet<>(), 0., new ArrayList<>());
-	}
-
 	@Override
 	public List<Integer> actions() {
 		// TODO Auto-generated method stub
-		List<Integer> alternativas = new ArrayList<>();
-		
-		if (index < Datos1.getNumCandidatos()) {
-			alternativas.add(0);
+		List<Integer> actions = new ArrayList<>();
+		       
+		if (index < (double) Datos1.getNumCandidatos()) {
+			actions.add(0);
+			Double sueldoActual = (double) Datos1.getSueldoMin(index);
+			Boolean compatible = true;
 			
-			Double futuroSueldo = sueldoAcumulado + Datos1.getSueldoMin(index);	
-			boolean esCompatible = elegidos.stream().noneMatch(e ->
-					Datos1.getSonIncompatibles(e, index) || Datos1.getSonIncompatibles(index, e));
-			
-			if (index < Datos1.getNumCandidatos() - 1) {
-				alternativas.add(0);
-				if (futuroSueldo <= Datos1.getPresupuestoMax() && esCompatible) {
-					alternativas.add(1);
+			for (int i = 0; i < elegidos.size(); i++) {
+				if (elegidos.get(i) == 1) {
+					if (Datos1.getSonIncompatibles(index, i) || Datos1.getSonIncompatibles(i, index)) {
+			            compatible = false;
+			            break; // Ya sabemos que no es compatible, no hace falta seguir buscando
+			        }
 				}
 			}
 			
-			else {
-				if (cualidades.containsAll(Datos1.getCualidades())) {
-					alternativas.add(0);
-				}
-				
-				if (futuroSueldo <= Datos1.getPresupuestoMax() && esCompatible) {
-					Set<String> cualidadesFuturas = new HashSet<>(cualidades);
-					cualidadesFuturas.addAll(Datos1.getCualidades());
-					
-					if(cualidadesFuturas.containsAll(Datos1.getCualidades())) {
-						alternativas.add(1);
-					}
-				}
+			if (sueldoActual <= presupuestoRestante && compatible) {
+				actions.add(1);
 			}
 		}
-		return alternativas;
+		
+		return actions;
 	}
 
-	        @Override
+	@Override
 	public Vertex1 neighbor(Integer a) {
-		Set<String> nuevasCualidades = new HashSet<>(cualidades);
-		Double nuevoSueldo = sueldoAcumulado;
-		List<Integer> nuevosElegidos = new ArrayList<>(elegidos);
+		// TODO Auto-generated method stub
+		Double nuevoPresupuestoRestante = presupuestoRestante;
+		
+		Set<String> nuevoCualidadesRestantes = new HashSet<>(cualidadesRestantes);
+		List<Integer> nuevoElegidos = new ArrayList<>(elegidos);
 		
 		if (a == 1) {
-			nuevasCualidades.addAll(Datos1.getCualidades(index));
-			nuevoSueldo += Datos1.getSueldoMin(index);
-			nuevosElegidos.add(index);
+			nuevoCualidadesRestantes.removeAll(Datos1.getCualidades(index));
+			nuevoPresupuestoRestante -= Datos1.getSueldoMin(index);
 		}
 		
-		return new Vertex1I(index +1, nuevasCualidades, nuevoSueldo, nuevosElegidos);
+		nuevoElegidos.add(a);
+
+		return new Vertex1I(index + 1, nuevoPresupuestoRestante, nuevoCualidadesRestantes, nuevoElegidos);
 	}
 
-	        @Override
+	@Override
 	public Edge1 edge(Integer a) {
 		// TODO Auto-generated method stub
-		return Edge1.of(this, neighbor(a), a);
+		return Edge1.of(this, this.neighbor(a), a);
 	}
 
-	public Boolean isGoal() {
-		return index == Datos1.getNumCandidatos() &&
-				cualidades.containsAll(Datos1.getCualidades());
+	@Override
+	public Boolean goal() {
+		// TODO Auto-generated method stub
+		return this.index == (double) Datos1.getNumCandidatos() && this.cualidadesRestantes.isEmpty();
 	}
+
+	@Override
+	public Boolean isValid() {
+		// TODO Auto-generated method stub
+		return this.index >= 0 && this.index <= (double) Datos1.getNumCandidatos() && this.presupuestoRestante >= 0;
+	}
+
+	@Override
+	public Boolean goalHasSolution() {
+		// TODO Auto-generated method stub
+		return this.cualidadesRestantes.isEmpty();
+	}
+
 }
