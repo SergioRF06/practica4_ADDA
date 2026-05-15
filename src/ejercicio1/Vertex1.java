@@ -13,6 +13,8 @@ public interface Vertex1 extends VirtualVertex<Vertex1, Edge1, Integer>{
 		Set<String> cualidades();
 		Double sueldoAcumulado();
 		List<Integer> elegidos();
+		
+		Boolean isGoal();
 				
 		public static Vertex1 initial() {
 			return new Vertex1I(0, new HashSet<>(), 0., new ArrayList<>());

@@ -1,6 +1,5 @@
 package tests.ejercicio1;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -13,6 +12,8 @@ import ejercicio1.Vertex1;
 import ejercicio1.Vertex1I;
 import us.lsi.graphs.alg.AStar;
 import us.lsi.graphs.virtual.EGraph;
+import us.lsi.graphs.virtual.EGraph.Type;
+import us.lsi.path.EGraphPath.PathType;
 
 public class TestsAStar {
 
@@ -23,7 +24,7 @@ public class TestsAStar {
 
 	for (Integer id_fichero = 1; id_fichero < 3; id_fichero++) {
 
-		Datos1.iniDatos("ficheros/p4/subconjuntos" + id_fichero + ".txt");
+		Datos1.iniDatos("datos_entrada/ejercicio1/DatosEntrada" + id_fichero + ".txt");
 		System.out.println("\n\n>\tResultados para el test " + id_fichero + "\n");
 //		Datos1.toConsole();
 
@@ -35,11 +36,13 @@ public class TestsAStar {
 		
 		EGraph<Vertex1, Edge1> graph = 
 				EGraph.virtual(start)
+				.pathType(PathType.Sum)
+				.type(Type.Max)
 				.edgeWeight(x-> x.weight())
 				.heuristic(Heuristic1::heuristic)
 				.build();
 
-		System.out.println("\n\n#### Ej3 Algoritmo Astar ####");
+		System.out.println("\n\n#### Ej1 Algoritmo Astar ####");
 		
 		AStar<Vertex1, Edge1,?> aStar = AStar.ofGreedy(graph);
 		

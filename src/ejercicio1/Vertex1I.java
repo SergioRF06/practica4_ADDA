@@ -20,13 +20,30 @@ public record Vertex1I(Integer index, Set<String> cualidades, Double sueldoAcumu
 		if (index < Datos1.getNumCandidatos()) {
 			alternativas.add(0);
 			
-			Double futuroSueldo = sueldoAcumulado + Datos1.getSueldoMin(index);
-			
+			Double futuroSueldo = sueldoAcumulado + Datos1.getSueldoMin(index);	
 			boolean esCompatible = elegidos.stream().noneMatch(e ->
 					Datos1.getSonIncompatibles(e, index) || Datos1.getSonIncompatibles(index, e));
 			
-			if (futuroSueldo <= Datos1.getPresupuestoMax() && esCompatible) {
-				alternativas.add(1);
+			if (index < Datos1.getNumCandidatos() - 1) {
+				alternativas.add(0);
+				if (futuroSueldo <= Datos1.getPresupuestoMax() && esCompatible) {
+					alternativas.add(1);
+				}
+			}
+			
+			else {
+				if (cualidades.containsAll(Datos1.getCualidades())) {
+					alternativas.add(0);
+				}
+				
+				if (futuroSueldo <= Datos1.getPresupuestoMax() && esCompatible) {
+					Set<String> cualidadesFuturas = new HashSet<>(cualidades);
+					cualidadesFuturas.addAll(Datos1.getCualidades());
+					
+					if(cualidadesFuturas.containsAll(Datos1.getCualidades())) {
+						alternativas.add(1);
+					}
+				}
 			}
 		}
 		return alternativas;
