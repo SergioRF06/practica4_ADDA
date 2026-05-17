@@ -12,7 +12,7 @@ public record Vertex1I(Integer index, Double presupuestoRestante, Set<String> cu
 		// TODO Auto-generated method stub
 		List<Integer> actions = new ArrayList<>();
 		       
-		if (index < (double) Datos1.getNumCandidatos()) {
+		if (index < Datos1.getNumCandidatos()) {
 			actions.add(0);
 			Double sueldoActual = (double) Datos1.getSueldoMin(index);
 			Boolean compatible = true;
@@ -61,19 +61,6 @@ public record Vertex1I(Integer index, Double presupuestoRestante, Set<String> cu
 	@Override
 	public Boolean goal() {
 		// TODO Auto-generated method stub
-		return this.index == (double) Datos1.getNumCandidatos() && this.cualidadesRestantes.isEmpty();
+		return this.index == Datos1.getNumCandidatos() && this.cualidadesRestantes.isEmpty();
 	}
-
-	@Override
-	public Boolean isValid() {
-		// TODO Auto-generated method stub
-		return this.index >= 0 && this.index <= (double) Datos1.getNumCandidatos() && this.presupuestoRestante >= 0;
-	}
-
-	@Override
-	public Boolean goalHasSolution() {
-		// TODO Auto-generated method stub
-		return this.cualidadesRestantes.isEmpty();
-	}
-
 }

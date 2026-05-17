@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.jgrapht.GraphPath;
+
 import ejercicio2.Datos2.Contenedor;
 import ejercicio2.Datos2.Elemento;
 import us.lsi.common.List2;
@@ -14,7 +16,23 @@ public class Solucion2 {
 	/* public static Solucion2 create(GraphPath<---, ---> gp) { Para A* y BT
 		TODO obtiene la lista de alternativas del camino y llama al otro factoria
 	}*/
+
+	public static Solucion2 create(GraphPath<Vertex2, Edge2> path) {
+		return Solucion2.ofEdges(path.getEdgeList());
+	}
+
 	
+	private static Solucion2 ofEdges(List<Edge2> edgeList) {
+		// TODO Auto-generated method stub
+		List<Integer> alternativas = List2.empty();
+		for (Edge2 alternativa : edgeList) {
+			alternativas.add(alternativa.action());
+		}
+		Solucion2 s = Solucion2.create(alternativas);
+		return s;
+	}
+
+
 	public static Solucion2 create(List<Integer> ls) {
 		return new Solucion2(ls);
 	}

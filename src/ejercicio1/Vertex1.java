@@ -15,9 +15,7 @@ public interface Vertex1 extends VirtualVertex<Vertex1, Edge1, Integer> {
 	List<Integer> elegidos();
 	
 	Boolean goal();
-	Boolean goalHasSolution();
-	Boolean isValid();
-
+	
 	public static Vertex1 start() {
 		Set<String> cualidadesRestantes = new HashSet<>(Datos1.getCualidades());
 		List<Integer> elegidos = new ArrayList<>();
