@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 public class Heuristic2 {
 
 	public static Double heuristic(Vertex2 v1, Predicate<Vertex2> goal, Vertex2 v2) {
-		if (v1.index() == Datos2.getNumElementos()) {
+		if (goal.test(v1)) {
 			return 0.;
 		}
 		

@@ -16,14 +16,33 @@ public class Solucion3 {
     private Double totalTime, totalEffort, totalMns;
 
     private Solucion3(List<Integer> ls) {  // Lista de acciones/alternativas
+    	this.totalTime = 0.0;
+    	this.totalEffort = 0.0;
+    	this.totalMns = 0.0;
     	
-    	/* TODO Las propiedades de la clase son:    	
-    		camino = secuencia de vertices visitados
-    		totalTime = tiempo total empelado
-    		totalEffort = esfuerzo total empleado
-    		totalMns = monumentos visitados consecutivamente (antes o despues de otro) */
-     }
-
+    	// Sabemos por tu clase Vertex3 que el inicio es el vértice 0
+    	Integer actual = 0; 
+    	
+    	// Para ir guardando la ruta y luego formatearla
+    	List<String> nodosCamino = new java.util.ArrayList<>();
+    	nodosCamino.add(Datos3.getVertex(actual).nombre()); // O simplemente .toString()
+    	
+    	// Recorremos las decisiones tomadas (la lista de intersecciones destino)
+    	for (Integer destino : ls) {
+    		this.totalTime += Datos3.tiempo(actual, destino);
+    		this.totalEffort += Datos3.esfuerzo(actual, destino);
+    		
+    		// Verificamos si pasamos de un monumento a otro
+    		if (Datos3.sonMonumentos(actual, destino)) {
+    			this.totalMns += 1.0; 
+    		}
+    		
+    		nodosCamino.add(Datos3.getVertex(destino).nombre());
+    		actual = destino;
+    	}
+    	
+    	this.camino = "Camino: " + String.join(" -> ", nodosCamino);
+    }
 	@Override
     public String toString() {
     	String s1 = String.format("\nTiempos (total/maximo): %.1f / %.1f", totalTime, Datos3.maxTime);
